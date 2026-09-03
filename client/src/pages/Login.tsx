@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { ArrowRight, Check, Cloud, Eye, EyeOff, LockKeyhole, Mail, ShieldCheck, WalletCards } from "lucide-react";
 import { toast } from "sonner";
-import { configureFirebase, getFirebaseAuth, parseFirebaseConfig } from "@/lib/cloud";
+import { configureFirebase, getFirebaseAuth, FIREBASE_CONFIG } from "@/lib/cloud";
 import { GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 
 export default function Login() {
   const [email, setEmail] = useState(""); const [password, setPassword] = useState(""); const [showPassword, setShowPassword] = useState(false); const [remember, setRemember] = useState(true); const [loading, setLoading] = useState(false);
-  const getAuthReady = () => { const raw = localStorage.getItem("bayti-firebase-settings"); const config = raw ? parseFirebaseConfig(raw) : null; if (!config) { toast.error("افتح إعدادات بيتي وأدخل Firebase Config أولاً"); return null; } try { configureFirebase(config); return getFirebaseAuth(); } catch { toast.error("تعذر تهيئة Firebase"); return null; } };
+  const getAuthReady = () => { try { configureFirebase(FIREBASE_CONFIG); return getFirebaseAuth(); } catch { toast.error("تعذر تهيئة Firebase"); return null; } };
   const submit = async (event: React.FormEvent) => { event.preventDefault(); if (!email || !password) return toast.error("اكتب البريد الإلكتروني وكلمة المرور أولاً"); const auth = getAuthReady(); if (!auth) return; setLoading(true); try { await signInWithEmailAndPassword(auth, email, password); toast.success("تم تسجيل الدخول"); window.location.href = "/"; } catch { toast.error("البريد أو كلمة المرور غير صحيحين، أو لم يتم تفعيل Email Auth في Firebase"); } finally { setLoading(false); } };
   const googleLogin = async () => { const auth = getAuthReady(); if (!auth) return; setLoading(true); try { await signInWithPopup(auth, new GoogleAuthProvider()); toast.success("تم تسجيل الدخول بحساب Google"); window.location.href = "/"; } catch { toast.error("تعذر تسجيل الدخول بحساب Google"); } finally { setLoading(false); } };
   const createAccount = async () => { if (!email || !password) return toast.error("اكتب البريد وكلمة المرور لإنشاء الحساب"); const auth = getAuthReady(); if (!auth) return; setLoading(true); try { await createUserWithEmailAndPassword(auth, email, password); toast.success("تم إنشاء الحساب"); window.location.href = "/"; } catch { toast.error("تعذر إنشاء الحساب؛ تأكد من تفعيل Email/Password في Firebase"); } finally { setLoading(false); } };
