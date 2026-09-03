@@ -33,10 +33,10 @@ pnpm start
 
 ## ملاحظات مهمة
 
-صفحة البريد وGoogle حالياً واجهة جاهزة وليست نظام مصادقة حقيقياً. كذلك لم يتم تفعيل Google Drive أو المزامنة السحابية في هذه النسخة؛ ذلك يحتاج backend وقاعدة بيانات ومصادقة OAuth آمنة، ولا ينبغي تنفيذها داخل frontend static أو تخزين أسرار Google في الكود.
+صفحة البريد وGoogle حالياً واجهة جاهزة وليست نظام مصادقة حقيقياً. أضيفت طبقة Firebase/Firestore اختيارية من الإعدادات: أدخل Firebase Web Config ومعرّف الأسرة نفسه على الأجهزة، ثم فعّل المزامنة اللحظية. Firestore يزامن العمليات والدخل والأهداف والأفراد والفئات، بينما يظل Dexie كاشاً محلياً للعمل أوفلاين. قبل الاستخدام الحقيقي، فعّل مصادقة Firebase وقواعد Firestore المقيدة بالمستخدم؛ لا تترك قاعدة البيانات مفتوحة للعامة.
 
 بيانات Dexie مرتبطة بالمتصفح والجهاز. استخدم تصدير Word أو Excel من الإعدادات للاحتفاظ بنسخة ونقل البيانات إلى جهاز جديد.
 
 ## التقنية
 
-React 19، TypeScript، Vite، Tailwind CSS، Lucide Icons، Sonner، وDexie/IndexedDB.
+React 19، TypeScript، Vite، Tailwind CSS، Lucide Icons، Sonner، Dexie/IndexedDB، Firebase Firestore، وSheetJS/XLSX.
